@@ -1,15 +1,3 @@
-Absolutely! Here’s a **detailed README.md** for your NexBoard Boilerplate, including:
-
-- Project intro and features
-- Full tech stack
-- File/folder structure (matching your screenshot)
-- Setup & usage
-- Customization tips
-- Contribution guidelines
-- MIT License
-
----
-
 ```markdown
 # NexBoard Boilerplate
 
