@@ -1,4 +1,3 @@
-```markdown
 # NexBoard Boilerplate
 
 A modern, minimal, and production-ready dashboard boilerplate built with **Next.js 15**, **shadcn/ui**, **Tailwind CSS 4**, and **lucide-react**.
@@ -31,7 +30,6 @@ Designed for easy customization and rapid development.
 - [TypeScript](https://www.typescriptlang.org/) – Static typing
 
 ---
-```
 
 ## 📂 Project Structure
 
@@ -195,13 +193,4 @@ SOFTWARE.
 
 ```
 
----
 
-**Tips:**
-- Replace `[Your Name]` with your name or organization.
-- Add a screenshot to the `public/` folder and link it in the preview section.
-- Update the repo URL if you publish it.
-- Add more sections (e.g., deployment, FAQ) as needed.
-
-Let me know if you want even more detail or a specific section!
-```
