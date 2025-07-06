@@ -31,10 +31,11 @@ Designed for easy customization and rapid development.
 - [TypeScript](https://www.typescriptlang.org/) – Static typing
 
 ---
-
-## 📂 Project Structure
 ```
 
+## 📂 Project Structure
+
+```
 tamplet/
 ├── .next/ # Next.js build output
 ├── node_modules/
@@ -63,7 +64,7 @@ tamplet/
 ├── tailwind.config.js
 └── tsconfig.json
 
-````
+```
 
 ---
 
@@ -74,7 +75,7 @@ tamplet/
 ```bash
 git clone https://github.com/Millosaurs/nexboard.git
 cd nexboard
-````
+```
 
 ### 2. **Install dependencies**
 
