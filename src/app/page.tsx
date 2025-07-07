@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
+import menu2 from "react-useanimations/lib/menu2";
 
 // Navbar Component
 function Navbar() {
@@ -42,15 +43,7 @@ function Navbar() {
           <div className="hidden md:flex items-center space-x-3">
             <ThemeToggle />
             <Link
-              href="auth"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Button variant="ghost" size="sm">
-                Sign In
-              </Button>
-            </Link>
-            <Link
-              href="auth"
+              href="/login"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <Button size="sm" className="group">
@@ -81,15 +74,7 @@ function Navbar() {
               <ThemeToggle />
               <div className="flex flex-col space-y-2 pt-4 border-t border-border/40">
                 <Link
-                  href="auth"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Button variant="ghost" size="sm">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link
-                  href="auth"
+                  href="/login"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Button size="sm" className="group">
@@ -106,7 +91,7 @@ function Navbar() {
   );
 }
 
-export default function EnhancedBoilerplateHero() {
+export default function Home() {
   const techStack = [
     {
       name: "Next.js 15+",
