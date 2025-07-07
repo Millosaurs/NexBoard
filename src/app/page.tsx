@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
-import menu2 from "react-useanimations/lib/menu2";
 
 // Navbar Component
 function Navbar() {
