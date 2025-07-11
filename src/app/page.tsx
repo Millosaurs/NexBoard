@@ -1,4 +1,3 @@
-"use client";
 import {
   ArrowRight,
   CheckCircle,
@@ -6,91 +5,35 @@ import {
   Database,
   ExternalLink,
   Github,
-  Menu,
   Palette,
   Shield,
-  X,
   Zap,
+  Moon,
+  Sun,
+  Folder,
+  FileText,
+  Layout,
+  Users,
+  Timer,
+  Sparkles,
+  Layers,
+  Globe,
+  Key,
+  Smartphone,
 } from "lucide-react";
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { MainNav } from "@/components/main-nav";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-// Navbar Component
-function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default async function Home() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-              <Code className="w-4 h-4 text-foreground" />
-            </div>
-            <span className="text-lg font-semibold text-foreground">
-              NexBoard
-            </span>
-          </div>
-
-          {/* Desktop CTA */}
-
-          <div className="hidden md:flex items-center space-x-3">
-            <ThemeToggle />
-            <Link
-              href="/login"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Button size="sm" className="group">
-                Get Started
-                <ArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <Button
-            className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-border/40 py-4">
-            <div className="flex flex-col space-y-4">
-              {/* Theme Toggle in mobile menu */}
-              <ThemeToggle />
-              <div className="flex flex-col space-y-2 pt-4 border-t border-border/40">
-                <Link
-                  href="/login"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Button size="sm" className="group">
-                    Get Started
-                    <ArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
-}
-
-export default function Home() {
   const techStack = [
     {
       name: "Next.js 15+",
@@ -114,30 +57,79 @@ export default function Home() {
     },
   ];
 
-  const features = [
-    {
-      title: "Type Safe",
-      description: "Full TypeScript support with type-safe database queries",
-      icon: CheckCircle,
-    },
-    {
-      title: "Modern Auth",
-      description: "Secure authentication with better-auth integration",
-      icon: Shield,
-    },
-    {
-      title: "Production Ready",
-      description: "Optimized for performance and scalability",
-      icon: Zap,
-    },
-  ];
+  const projectStructure = `tamplet/
+├── .next/
+├── node_modules/
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   └── signup/
+│   │   │       └── page.tsx
+│   │   ├── (dashboard)/
+│   │   │   ├── dashboard/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── [noteId]/
+│   │   │   │       └── page.tsx
+│   │   │   └── [username]/
+│   │   │       └── [slug]/
+│   │   │           └── page.tsx
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   └── [...all]/
+│   │   │   │       └── route.ts
+│   │   │   └── notes/
+│   │   │       └── [id]/
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── app-sidebar.tsx
+│   │   ├── login-form.tsx
+│   │   ├── main-nav.tsx
+│   │   ├── markdown-renderer.tsx
+│   │   ├── nav-main.tsx
+│   │   ├── nav-projects.tsx
+│   │   ├── nav-secondary.tsx
+│   │   ├── nav-user.tsx
+│   │   ├── notes-list.tsx
+│   │   ├── notes-table.tsx
+│   │   ├── signup-form.tsx
+│   │   ├── theme-provider.tsx
+│   │   └── theme-toggle.tsx
+│   ├── db/
+│   │   ├── index.ts
+│   │   └── schema.ts
+│   ├── hooks/
+│   │   └── use-mobile.ts
+│   ├── lib/
+│   │   ├── auth-client.ts
+│   │   ├── auth.ts
+│   │   └── utils.ts
+│   └── server/
+│       ├── notes.ts
+│       └── user.ts
+├── .gitignore
+├── bun.lock
+├── components.json
+├── drizzle.config.ts
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── README.md
+└── tsconfig.json`;
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <MainNav session={session} />
 
       <div className="container mx-auto px-4 py-32 pt-48">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-24">
             <Badge variant="secondary" className="mb-6">
@@ -157,10 +149,12 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button className="group">
-                Get Started
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href={session ? "/dashboard" : "/login"}>
+                <Button className="group">
+                  {session ? "Dashboard" : "Get Started"}
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <Button variant="outline">
                 <Github className="mr-2 w-4 h-4" />
                 GitHub
@@ -186,8 +180,8 @@ export default function Home() {
                     className="hover:bg-accent/50 transition-colors group"
                   >
                     <CardContent className="p-6 text-center">
-                      <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-lg flex items-center justify-center group-hover:from-blue-500/20 group-hover:to-purple-600/20 transition-colors">
-                        <IconComponent className="w-6 h-6 text-blue-600" />
+                      <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                        <IconComponent className="w-6 h-6 text-primary" />
                       </div>
                       <h3 className="font-medium text-foreground mb-1">
                         {tech.name}
@@ -202,51 +196,424 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Features */}
+          {/* Bento Grid Features */}
           <div className="mb-24">
             <h2 className="text-sm font-medium text-muted-foreground mb-8 text-center uppercase tracking-wider">
-              Features
+              Features & Capabilities
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {features.map((feature) => {
-                const IconComponent = feature.icon;
-                return (
-                  <div key={feature.title} className="text-center group">
-                    <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-green-500/10 to-emerald-600/10 rounded-lg flex items-center justify-center group-hover:from-green-500/20 group-hover:to-emerald-600/20 transition-colors">
-                      <IconComponent className="w-6 h-6 text-green-600" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Modern UI */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Palette className="w-5 h-5 text-primary" />
                     </div>
-                    <h3 className="font-medium text-foreground mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
+                    <CardTitle className="text-lg">Modern UI</CardTitle>
                   </div>
-                );
-              })}
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Built with shadcn/ui and Tailwind CSS 4, using only design
+                    tokens and variables for consistent theming.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      shadcn/ui
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Tailwind CSS
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Authentication */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Shield className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Secure Auth</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Pre-built authentication with better-auth, including login,
+                    signup, and session management.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      better-auth
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Sessions
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Database */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Database className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Type-Safe ORM</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Drizzle ORM provides full TypeScript support with type-safe
+                    database queries and migrations.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Drizzle ORM
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      TypeScript
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Responsive Design */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Smartphone className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Responsive</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Collapsible sidebar, mobile-friendly navigation, and
+                    responsive layouts for all screen sizes.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Mobile First
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Adaptive
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Theme Support */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Moon className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Dark/Light Mode</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Seamless theme switching with next-themes and persisted user
+                    preferences.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      next-themes
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Persistent
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Accessibility */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Users className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Accessible</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Built with Radix UI primitives for keyboard navigation and
+                    screen reader support.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Radix UI
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      WCAG
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Performance */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Zap className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Production Ready</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Optimized for performance with Next.js 15 App Router,
+                    SSR/SSG, and efficient bundling.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      App Router
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      SSR/SSG
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Developer Experience */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Code className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">
+                      Developer Experience
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Full TypeScript support, ESLint configuration, and hot
+                    reloading for optimal development workflow.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      TypeScript
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      ESLint
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Componentized */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Layers className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Componentized</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Modular component architecture that's easy to extend,
+                    maintain, and customize for your needs.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Modular
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Reusable
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Notes Management */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <FileText className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">Notes Management</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Create, edit, publish, and manage your notes with a rich
+                    text editor and public sharing options.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Markdown Support
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Public Links
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* User Profiles */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Key className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">User Profiles</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Dedicated public profile pages for users to showcase their
+                    published notes.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Dynamic Routes
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Personalized URLs
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* API Routes */}
+              <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <Globe className="w-5 h-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg">API Routes</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Secure API endpoints for authentication and note management,
+                    built with Next.js API routes.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="text-xs">
+                      Next.js API
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Server Actions
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="border-t border-border pt-12">
-            <div className="grid grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-2xl font-medium text-foreground mb-1">
-                  5min
+          {/* Project Structure */}
+          <div className="mb-24">
+            <h2 className="text-sm font-medium text-muted-foreground mb-8 text-center uppercase tracking-wider">
+              Project Architecture
+            </h2>
+            <Card className="group hover:shadow-lg transition-all duration-300 border-border/50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                    <Folder className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl">
+                      Well-Organized Structure
+                    </CardTitle>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Clear separation of concerns with modular components and
+                      logical file organization
+                    </p>
+                  </div>
                 </div>
-                <div className="text-sm text-muted-foreground">Setup</div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="bg-muted/30 rounded-lg p-6 overflow-x-auto">
+                  <pre className="text-sm font-mono text-muted-foreground leading-relaxed">
+                    {projectStructure}
+                  </pre>
+                </div>
+                <div className="flex items-center gap-3 mt-6 pt-4 border-t border-border/50">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span className="text-xs text-muted-foreground">
+                      Auth Routes
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-primary/60 rounded-full"></div>
+                    <span className="text-xs text-muted-foreground">
+                      Dashboard
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-primary/40 rounded-full"></div>
+                    <span className="text-xs text-muted-foreground">
+                      Components
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-primary/20 rounded-full"></div>
+                    <span className="text-xs text-muted-foreground">
+                      Database
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Enhanced Stats */}
+          <div className="border-t border-border pt-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div className="group">
+                <div className="flex items-center justify-center mb-2">
+                  <Timer className="w-5 h-5 text-primary mr-2" />
+                  <div className="text-2xl font-medium text-foreground">
+                    5min
+                  </div>
+                </div>
+                <div className="text-sm text-muted-foreground">Quick Setup</div>
               </div>
-              <div>
-                <div className="text-2xl font-medium text-foreground mb-1">
-                  100%
+              <div className="group">
+                <div className="flex items-center justify-center mb-2">
+                  <CheckCircle className="w-5 h-5 text-primary mr-2" />
+                  <div className="text-2xl font-medium text-foreground">
+                    100%
+                  </div>
                 </div>
                 <div className="text-sm text-muted-foreground">Type Safe</div>
               </div>
-              <div>
-                <div className="text-2xl font-medium text-foreground mb-1">
-                  0 Config
+              <div className="group">
+                <div className="flex items-center justify-center mb-2">
+                  <Sparkles className="w-5 h-5 text-primary mr-2" />
+                  <div className="text-2xl font-medium text-foreground">
+                    0 Config
+                  </div>
                 </div>
                 <div className="text-sm text-muted-foreground">Ready to Go</div>
+              </div>
+              <div className="group">
+                <div className="flex items-center justify-center mb-2">
+                  <Layers className="w-5 h-5 text-primary mr-2" />
+                  <div className="text-2xl font-medium text-foreground">
+                    10+
+                  </div>
+                </div>
+                <div className="text-sm text-muted-foreground">Components</div>
               </div>
             </div>
           </div>

@@ -1,5 +1,14 @@
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:is(.dark *));
 

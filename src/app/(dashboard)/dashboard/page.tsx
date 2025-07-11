@@ -1,4 +1,3 @@
-import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,142 +7,60 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DollarSign, Users, Folder, Activity, TrendingUp } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getNotes, getCurrentUsername } from "@/server/notes";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { NotesTable } from "@/components/notes-table";
+import { FilePlus2, User2 } from "lucide-react"; // For icons
 
-const stats = [
-  {
-    label: "Revenue",
-    value: "$12,400",
-    icon: DollarSign,
-    growth: "+4.2%",
-  },
-  {
-    label: "Users",
-    value: "1,230",
-    icon: Users,
-    growth: "+2.1%",
-  },
-  {
-    label: "Projects",
-    value: "8",
-    icon: Folder,
-    growth: "+1",
-  },
-];
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: any;
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="flex items-center gap-4 bg-card rounded-lg shadow-sm border border-border px-6 py-4 min-w-[180px]">
+      <div className="p-2 rounded-full bg-muted text-muted-foreground">
+        <Icon className="w-6 h-6" />
+      </div>
+      <div>
+        <div className="text-lg font-bold text-foreground">{value}</div>
+        <div className="text-xs text-muted-foreground">{label}</div>
+      </div>
+    </div>
+  );
+}
 
-const recentActivity = [
-  {
-    id: 1,
-    icon: <Activity className="w-4 h-4 text-primary" />,
-    description: "Deployed new version of Acme App",
-    user: {
-      name: "Alex Smith",
-      avatar: "/avatars/alex.jpg",
-    },
-    time: "2 hours ago",
-  },
-  {
-    id: 2,
-    icon: <Activity className="w-4 h-4 text-primary" />,
-    description: "Added new user: Jane Doe",
-    user: {
-      name: "Jane Doe",
-      avatar: "/avatars/jane.jpg",
-    },
-    time: "5 hours ago",
-  },
-  {
-    id: 3,
-    icon: <Activity className="w-4 h-4 text-primary" />,
-    description: "Completed project: Redesign Website",
-    user: {
-      name: "Chris Lee",
-      avatar: "/avatars/chris.jpg",
-    },
-    time: "1 day ago",
-  },
-];
+export default async function Dashboard() {
+  const notesResult = await getNotes();
+  const notes = notesResult && "notes" in notesResult ? notesResult.notes : [];
 
-const topProjects = [
-  {
-    name: "Acme App",
-    progress: 80,
-    team: [
-      { name: "Alex", avatar: "/avatars/alex.jpg" },
-      { name: "Jane", avatar: "/avatars/jane.jpg" },
-    ],
-  },
-  {
-    name: "Redesign Website",
-    progress: 60,
-    team: [
-      { name: "Chris", avatar: "/avatars/chris.jpg" },
-      { name: "Sam", avatar: "/avatars/sam.jpg" },
-    ],
-  },
-  {
-    name: "Marketing Campaign",
-    progress: 35,
-    team: [
-      { name: "Taylor", avatar: "/avatars/taylor.jpg" },
-      { name: "Jordan", avatar: "/avatars/jordan.jpg" },
-    ],
-  },
-];
+  const usernameResult = await getCurrentUsername();
+  const username =
+    usernameResult && "username" in usernameResult
+      ? usernameResult.username
+      : null;
 
-const teamMembers = [
-  {
-    name: "Alex Smith",
-    role: "Developer",
-    avatar: "/avatars/alex.jpg",
-  },
-  {
-    name: "Jane Doe",
-    role: "Designer",
-    avatar: "/avatars/jane.jpg",
-  },
-  {
-    name: "Chris Lee",
-    role: "Project Manager",
-    avatar: "/avatars/chris.jpg",
-  },
-  {
-    name: "Sam Green",
-    role: "QA Engineer",
-    avatar: "/avatars/sam.jpg",
-  },
-];
-
-export default function Dashboard() {
   return (
     <>
-      <header className="flex h-16 shrink-0 items-center border-b border-border bg-background rounded-t-xl">
-        <div className="flex flex-row justify-between items-center w-full mx-4">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
-            />
+      {/* Header */}
+      <header className="sticky top-0 z-30 flex h-16 items-center border-b bg-background/80 backdrop-blur-md rounded-t-xl shadow-sm">
+        <div className="flex flex-row justify-between items-center w-full mx-auto px-4">
+          <div className="flex items-center gap-3">
+            <SidebarTrigger className="-ml-2" />
+            <Separator orientation="vertical" className="h-6" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Overview</BreadcrumbPage>
+                  <BreadcrumbLink asChild>
+                    <Link href="/dashboard">Dashboard</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -151,149 +68,49 @@ export default function Dashboard() {
           <ThemeToggle />
         </div>
       </header>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-4 bg-background">
-        {/* Stat Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
-          {stats.map((stat) => (
-            <Card key={stat.label} className="flex flex-row items-center p-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-accent mr-4">
-                <stat.icon className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <div className="text-lg font-semibold text-foreground">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {stat.label}
-                </div>
-              </div>
-              <div className="flex items-center gap-1">
-                <TrendingUp className="w-4 h-4 text-green-600" />
-                <span className="text-xs text-green-600 font-medium">
-                  {stat.growth}
-                </span>
-              </div>
-            </Card>
-          ))}
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col items-center bg-background">
+        <div className="w-full max-w-6xl mx-auto py-8 px-4">
+          {/* Stat Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+            <StatCard
+              icon={FilePlus2}
+              label="Total Notes"
+              value={notes.length}
+            />
+            <StatCard
+              icon={User2}
+              label="User"
+              value={username || "Anonymous"}
+            />
+            {/* Add more StatCards here if needed */}
+          </div>
+
+          {notes.length === 0 ? (
+            <section className="flex flex-col items-center justify-center h-[60vh] bg-card rounded-xl shadow-md border border-border">
+              <FilePlus2 className="w-14 h-14 text-muted-foreground mb-4" />
+              <h2 className="text-2xl font-bold mb-2 text-foreground">
+                No notes yet!
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-md">
+                You haven&apos;t created any notes. Click below to get started!
+              </p>
+              <Button
+                asChild
+                size="lg"
+                className="rounded-lg font-semibold shadow focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Link href="/dashboard/new">Create New Note</Link>
+              </Button>
+            </section>
+          ) : (
+            <section className="bg-card rounded-xl shadow-md border border-border p-4">
+              <NotesTable notes={notes} username={username || null} />
+            </section>
+          )}
         </div>
-        {/* Main Content Grid */}
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Recent Activity */}
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground">
-                Recent Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {recentActivity.map((item) => (
-                  <li key={item.id} className="flex items-center gap-3">
-                    {item.icon}
-                    <Avatar className="h-7 w-7">
-                      <AvatarImage
-                        src={item.user.avatar}
-                        alt={item.user.name}
-                      />
-                      <AvatarFallback>
-                        {item.user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="text-sm text-foreground">
-                        {item.description}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {item.time}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-          {/* Top Projects */}
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground">
-                Top Projects
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {topProjects.map((project) => (
-                  <li key={project.name}>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-foreground">
-                        {project.name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {project.progress}%
-                      </span>
-                    </div>
-                    <Progress value={project.progress} className="h-2 mb-2" />
-                    <div className="flex -space-x-2">
-                      {project.team.map((member) => (
-                        <Avatar
-                          key={member.name}
-                          className="h-6 w-6 border-2 border-background"
-                        >
-                          <AvatarImage src={member.avatar} alt={member.name} />
-                          <AvatarFallback>
-                            {member.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      ))}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-        {/* Team Members */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-foreground">
-              Team Members
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {teamMembers.map((member) => (
-                <li key={member.name} className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={member.avatar} alt={member.name} />
-                    <AvatarFallback>
-                      {member.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="text-sm font-medium text-foreground">
-                      {member.name}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {member.role}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      </main>
     </>
   );
 }

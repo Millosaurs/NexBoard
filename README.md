@@ -16,6 +16,7 @@ Designed for easy customization and rapid development.
 - **Componentized**: Easy to extend and maintain.
 - **TypeScript**: Full type safety and autocompletion.
 - **Radix UI Primitives**: For accessible, unstyled UI building blocks.
+- **Enhanced Home Page**: Features a modern landing page with detailed feature cards and project architecture overview.
 
 ---
 
@@ -41,27 +42,67 @@ tamplet/
 │ └── avatars/ # User avatar images
 ├── src/
 │ ├── app/
-│ │ ├── auth/
-│ │ │ └── page.tsx # Authentication page
-│ │ ├── dashboard/
-│ │ │ └── page.tsx # Dashboard page
-│ │ ├── layout.tsx # App layout (sidebar, theme, etc.)
+│ │ ├── (auth)/ # Authentication routes
+│ │ │ ├── login/
+│ │ │ │ └── page.tsx
+│ │ │ └── signup/
+│ │ │     └── page.tsx
+│ │ ├── (dashboard)/ # Dashboard routes
+│ │ │ ├── dashboard/
+│ │ │ │ ├── layout.tsx
+│ │ │ │ ├── page.tsx
+│ │ │ │ └── [noteId]/ # Dynamic route for note editing
+│ │ │ │     └── page.tsx
+│ │ │ └── [username]/ # Public profile routes
+│ │ │     └── [slug]/ # Dynamic route for public notes
+│ │ │         └── page.tsx
+│ │ ├── api/ # API routes
+│ │ │ ├── auth/
+│ │ │ │ └── [...all]/ # Catch-all route for authentication API
+│ │ │ │     └── route.ts
+│ │ │ └── notes/
+│ │ │     └── [id]/ # Dynamic route for notes API
+│ │ ├── favicon.ico
+│ │ ├── globals.css
+│ │ ├── layout.tsx # App layout
 │ │ └── page.tsx # Root landing page
-│ ├── components/ # UI and app components (sidebar, nav, cards, etc.)
+│ ├── components/ # UI and app components
+│ │ ├── ui/ # Shadcn/ui components
+│ │ ├── app-sidebar.tsx
+│ │ ├── login-form.tsx
+│ │ ├── main-nav.tsx
+│ │ ├── markdown-renderer.tsx
+│ │ ├── nav-main.tsx
+│ │ ├── nav-projects.tsx
+│ │ ├── nav-secondary.tsx
+│ │ ├── nav-user.tsx
+│ │ ├── notes-list.tsx
+│ │ ├── notes-table.tsx
+│ │ ├── signup-form.tsx
+│ │ ├── theme-provider.tsx
+│ │ └── theme-toggle.tsx
+│ ├── db/ # Database schema and connection
+│ │ ├── index.ts
+│ │ └── schema.ts
 │ ├── hooks/ # Custom React hooks
+│ │ └── use-mobile.ts
 │ ├── lib/ # Utilities and libraries
-│ └── globals.css # Tailwind and global styles
+│ │ ├── auth-client.ts
+│ │ ├── auth.ts
+│ │ └── utils.ts
+│ └── server/ # Server-side functions
+│     ├── notes.ts
+│     └── user.ts
 ├── .gitignore
 ├── bun.lock
 ├── components.json
-├── next-env.d.ts
+├── drizzle.config.ts
 ├── next.config.ts
 ├── package.json
 ├── postcss.config.mjs
 ├── README.md
 ├── tailwind.config.js
 └── tsconfig.json
-
 ```
 
 ---
@@ -148,6 +189,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the d
 
 ---
 
+## Why you should use this boilerplate
+
+NexBoard is designed to accelerate your development process by providing a robust and modern foundation. Here's why it stands out:
+
+*   **Rapid Development**: Get started instantly with pre-configured Next.js 15, Tailwind CSS, and shadcn/ui. Focus on your application's unique features, not boilerplate setup.
+*   **Modern Stack**: Leverage the latest and greatest technologies for a performant, scalable, and maintainable application.
+*   **Full-stack Ready**: With Drizzle ORM and Better Auth integrated, you have a complete solution for both frontend and backend needs, including secure authentication and type-safe database interactions.
+*   **Developer Experience**: Enjoy a smooth development workflow with TypeScript, ESLint, and a well-organized project structure.
+*   **Production-Grade**: Optimized for performance and built with best practices, NexBoard is ready for deployment from day one.
+*   **Highly Customizable**: The modular component architecture and design token-based theming make it easy to adapt NexBoard to your specific design and functional requirements.
+
+---
+
 ## 🤝 Contributing
 
 1. Fork this repository
@@ -190,7 +244,3 @@ SOFTWARE.
 
 > Built with ❤️ using [shadcn/ui](https://ui.shadcn.com/) and [Next.js](https://nextjs.org/).
 > Built by [Millosaurs](https://shrivatsav.dev)
-
-```
-
-

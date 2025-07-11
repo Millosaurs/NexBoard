@@ -4,8 +4,8 @@ import {
   timestamp,
   boolean,
   integer,
+  serial,
 } from "drizzle-orm/pg-core";
-import { use } from "react";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -67,4 +67,17 @@ export const verification = pgTable("verification", {
   ),
 });
 
-export const schema = { user, session, account, verification };
+export const notes = pgTable("notes", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  status: text("status", { enum: ["draft", "published"] }).default("draft").notNull(),
+  slug: text("slug").unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});
+
+export const schema = { user, session, account, verification, notes };
