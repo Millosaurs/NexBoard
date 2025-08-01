@@ -9,7 +9,6 @@ export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Fix hydration issue
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -26,11 +25,7 @@ export function ThemeToggle() {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {isDark ? (
-        <Sun className="w-5 h-5" />
-      ) : (
-        <Moon className="w-5 h-5" />
-      )}
+      {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       <span className="sr-only">
         {isDark ? "Switch to light mode" : "Switch to dark mode"}
       </span>

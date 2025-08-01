@@ -1,83 +1,139 @@
 import {
   pgTable,
-  text,
-  timestamp,
-  boolean,
-  integer,
   serial,
+  varchar,
+  text,
+  integer,
+  timestamp,
+  decimal,
+  boolean,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified")
-    .$defaultFn(() => false)
-    .notNull(),
-  image: text("image"),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
-
-export const session = pgTable("session", {
-  id: text("id").primaryKey(),
-  expiresAt: timestamp("expires_at").notNull(),
-  token: text("token").notNull().unique(),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
-  ipAddress: text("ip_address"),
-  userAgent: text("user_agent"),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+  id: varchar("id", { length: 255 }).primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  name: varchar("name", { length: 255 }).notNull(),
+  emailVerified: boolean("emailVerified").default(false),
+  image: varchar("image", { length: 255 }),
+  balance: decimal("balance", { precision: 10, scale: 2 }).default("1000.00"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
 export const account = pgTable("account", {
-  id: text("id").primaryKey(),
-  accountId: text("account_id").notNull(),
-  providerId: text("provider_id").notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  accessToken: text("access_token"),
-  refreshToken: text("refresh_token"),
-  idToken: text("id_token"),
-  accessTokenExpiresAt: timestamp("access_token_expires_at"),
-  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: text("scope"),
-  password: text("password"),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  id: varchar("id", { length: 255 }).primaryKey(),
+  accountId: varchar("accountId", { length: 255 }).notNull(),
+  providerId: varchar("providerId", { length: 255 }).notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  idToken: text("idToken"),
+  accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+  refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+  scope: varchar("scope", { length: 255 }),
+  password: varchar("password", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
+});
+
+export const session = pgTable("session", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
+  ipAddress: varchar("ipAddress", { length: 255 }),
+  userAgent: varchar("userAgent", { length: 255 }),
+  userId: varchar("userId", { length: 255 }).notNull(),
 });
 
 export const verification = pgTable("verification", {
-  id: text("id").primaryKey(),
-  identifier: text("identifier").notNull(),
-  value: text("value").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
-  ),
-  updatedAt: timestamp("updated_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
-  ),
+  id: varchar("id", { length: 255 }).primaryKey(),
+  identifier: varchar("identifier", { length: 255 }).notNull(),
+  value: varchar("value", { length: 255 }).notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-export const notes = pgTable("notes", {
+export const auctions = pgTable("auctions", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  status: text("status", { enum: ["draft", "published"] }).default("draft").notNull(),
-  slug: text("slug").unique(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  startingPrice: decimal("starting_price", {
+    precision: 10,
+    scale: 2,
+  }).notNull(),
+  currentPrice: decimal("current_price", { precision: 10, scale: 2 }).notNull(),
+  closingDate: timestamp("closing_date").notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  isLocked: boolean("is_locked").default(false),
+  endedManually: boolean("ended_manually").default(false),
 });
 
-export const schema = { user, session, account, verification, notes };
+export const bids = pgTable("bids", {
+  id: serial("id").primaryKey(),
+  auctionId: integer("auction_id").notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  refunded: boolean("refunded").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const userRelations = relations(user, ({ many }) => ({
+  auctions: many(auctions),
+  bids: many(bids),
+}));
+
+export const auctionsRelations = relations(auctions, ({ one, many }) => ({
+  user: one(user, {
+    fields: [auctions.userId],
+    references: [user.id],
+  }),
+  bids: many(bids),
+}));
+
+export const bidsRelations = relations(bids, ({ one }) => ({
+  auction: one(auctions, {
+    fields: [bids.auctionId],
+    references: [auctions.id],
+  }),
+  user: one(user, {
+    fields: [bids.userId],
+    references: [user.id],
+  }),
+}));
+
+export const balanceTransactions = pgTable("balance_transactions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  auctionId: integer("auction_id"),
+  bidId: integer("bid_id"),
+  type: varchar("type", { length: 50 }).notNull(), // 'bid_hold', 'bid_refund', 'auction_win', 'auction_refund'
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const balanceTransactionsRelations = relations(
+  balanceTransactions,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [balanceTransactions.userId],
+      references: [user.id],
+    }),
+    auction: one(auctions, {
+      fields: [balanceTransactions.auctionId],
+      references: [auctions.id],
+    }),
+    bid: one(bids, {
+      fields: [balanceTransactions.bidId],
+      references: [bids.id],
+    }),
+  })
+);
